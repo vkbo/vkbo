@@ -16,6 +16,11 @@ The command line equivalent, with reporting, is:
 flake8 . --count --ignore E203,E221,E226,E241,E251,E261,E266,E302,E305 --max-line-length=99 --show-source --statistics
 ```
 
+There is a VSCode extension that wraps `flake8` called
+[cornflakes-linter](https://marketplace.visualstudio.com/items?itemName=kevinglasson.cornflakes-linter)
+that is convenient for real time linting.
+
+
 ## Ignored Errors
 
 The ignored errors are all `pycodestyle` errors, documented [here](https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes).
