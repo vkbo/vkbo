@@ -6,14 +6,14 @@ The documentation is available [here](https://flake8.pycqa.org/en/latest/).
 I run it in my Python workspaces with the following config which can be put in a `tox.ini` file or a `setup.cfg` file:
 ```conf
 [flake8]
-ignore = E203,E221,E226,E241,E251,E261,E266,E302,E305
+ignore = E203,E221,E226,E228,E241,E251,E261,E266,E302,E305
 max-line-length = 99
 exclude = docs/*
 ```
 
 The command line equivalent, with reporting, is:
 ```bash
-flake8 . --count --ignore E203,E221,E226,E241,E251,E261,E266,E302,E305 --max-line-length=99 --show-source --statistics
+flake8 . --count --ignore E203,E221,E226,E228,E241,E251,E261,E266,E302,E305 --max-line-length=99 --show-source --statistics
 ```
 
 There is a VSCode extension that wraps `flake8` called
@@ -30,33 +30,40 @@ other coding styles (like for instance Go). I find them very useful in regions o
 tables are more readable than lists, but it shouldn't be overused.
 
 **E203:** whitespace before ‘:’  
-Reason: Column alignment. It is natural to align dictionary columns along the `:` character,
+**Reason:** Column alignment. It is natural to align dictionary columns along the `:` character.
 
 **E221:** multiple spaces before operator  
-Reason: Column alignment.
+**Reason:** Column alignment.
 
 **E226:** missing whitespace around arithmetic operator  
-Reason: This doesn't actually follow the PEP8 recommendation of grouping longer equations by operator precedence like `2*a + 3*b`
-instead of `a * a + 3 * b`.
+**Reason:** This doesn't actually follow the PEP8 recommendation of grouping longer equations by
+operator precedence like `2*a + 3*b` instead of `a * a + 3 * b`. Generally, don't use spaces around
+`*`, `/` and `**`, but do use spaces around `+` and `-`. For appending strings, the spaces can be
+dropped. Don't use the `+` operator for appending multiple strings. Use formatting instead.
+
+**E228** missing whitespace around modulo operator  
+**Reason:** See reason for E226. Formatting `%` like `/` and `*` should be possible.
 
 **E241:** multiple spaces after ‘,’  
-Reason: Column alignment.
+**Reason:** Column alignment.
 
 **E251:** unexpected spaces around keyword / parameter equals  
-Reason: Column alignment.
+**Reason:** Column alignment.
 
 **E261:** at least two spaces before inline comment  
-Reason: With syntax highlighting, this one is meaningless.
+**Reason:** With syntax highlighting, this one doesn't make much sense.
 
 **E266:** too many leading ‘#’ for block comment  
-Reason: I sometimes use multiple `#`s to indicate importance level, like markdown headers.
+**Reason:** In the source multiple `#`s is sometimes used to indicate importance or heading level,
+like markdown headers.
 
 **E302:** expected 2 blank lines, found 0  
-Reason: Applies to classes, and I prefer to end classes with a comment like `# END Class ClassName` to make it easier to see which
-class just ended. The double line break is then redundant.
+**Reason:** Applies to classes. Instead, end classes with a comment like `# END Class ClassName` to
+make it easier to see which class just ended. The double line break is then redundant.
 
 **E305:** expected 2 blank lines after end of function or class  
-Reason: I _always_ end a function with a `return`, preferrably indented at function level. The end of the function is then clear.
+**Reason:** Instead, _always_ end a function with a `return`, preferably indented at function
+level. The end of the function is then clear.
 
 ## GitHub Action YAML
 
@@ -87,5 +94,5 @@ jobs:
       - name: Syntax Error Check
         run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
       - name: Coding Style Violations
-        run: flake8 . --count --max-line-length=99 --ignore E203,E221,E226,E241,E251,E261,E266,E302,E305 --show-source --statistics
+        run: flake8 . --count --max-line-length=99 --ignore E203,E221,E226,E228,E241,E251,E261,E266,E302,E305 --show-source --statistics
 ```
