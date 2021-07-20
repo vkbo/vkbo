@@ -1,69 +1,53 @@
 # My Python Style Guide
 
+When writing Python code, I generally recommend following the PEP8 standard. It is available here:
+
+* Online at [www.python.org/dev/peps/pep-0008](https://www.python.org/dev/peps/pep-0008).
+* I've also formatted it as an [Open Document](PEP8.odt), also available as a [PDF](PEP8.pdf).
+
+
+## Linting with `flake8`
+
 An excellent tool for checking Python code for errors and coding style is `flake8`.
 The documentation is available [here](https://flake8.pycqa.org/en/latest/).
 
-I run it in my Python workspaces with the following config which can be put in a `tox.ini` file or a `setup.cfg` file:
+I run it in my Python workspaces with the following config which can be put in a `tox.ini` file or
+a `setup.cfg` file:
+
 ```conf
 [flake8]
-ignore = E203,E221,E226,E241,E251,E261,E266,E302,E305
+ignore = E221,E226,E228,E241
 max-line-length = 99
 exclude = docs/*
 ```
 
 The command line equivalent, with reporting, is:
 ```bash
-flake8 . --count --ignore E203,E221,E226,E241,E251,E261,E266,E302,E305 --max-line-length=99 --show-source --statistics
+flake8 . --count --ignore E221,E226,E228,E241 --max-line-length=99 --show-source --statistics
 ```
 
-There is a VSCode extension that wraps `flake8` called
-[cornflakes-linter](https://marketplace.visualstudio.com/items?itemName=kevinglasson.cornflakes-linter)
-that is convenient for real time linting.
+The Python extension in VSCode extension can be set up for real-time linting in the editor.
 
+### Ignored Errors
 
-## Ignored Errors
+The ignored errors are all `pycodestyle` errors, documented
+[here](https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes).
 
-The ignored errors are all `pycodestyle` errors, documented [here](https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes).
+Two of the ignored errors are due to the relaxed restriction I generally have on column alignment,
+these are the E221 and E241 error codes.
 
-The reasons behind the ignores are listed below. Many of them are due to PEP8 not permitting column alignment as opposed to many
-other coding styles (like for instance Go). I find them very useful in regions of bulk value assignments. There's a reason why
-tables are more readable than lists, but it shouldn't be overused.
+The code E226 is ignored becuse it doesn't actually follow the
+[PEP8 recommendation](https://www.python.org/dev/peps/pep-0008/#other-recommendations)
+of grouping longer equations by operator precedence like `2*a + 3*b` instead of `a * a + 3 * b`.
+Generally, don't use spaces around `*`, `/` and `**`, but _do_ use spaces around `+` and `-`.
+The same applies to the modulo operator `%`, hence E228 is also ignored.
 
-**E203:** whitespace before ‘:’  
-Reason: Column alignment. It is natural to align dictionary columns along the `:` character,
-
-**E221:** multiple spaces before operator  
-Reason: Column alignment.
-
-**E226:** missing whitespace around arithmetic operator  
-Reason: This doesn't actually follow the PEP8 recommendation of grouping longer equations by operator precedence like `2*a + 3*b`
-instead of `a * a + 3 * b`.
-
-**E241:** multiple spaces after ‘,’  
-Reason: Column alignment.
-
-**E251:** unexpected spaces around keyword / parameter equals  
-Reason: Column alignment.
-
-**E261:** at least two spaces before inline comment  
-Reason: With syntax highlighting, this one is meaningless.
-
-**E266:** too many leading ‘#’ for block comment  
-Reason: I sometimes use multiple `#`s to indicate importance level, like markdown headers.
-
-**E302:** expected 2 blank lines, found 0  
-Reason: Applies to classes, and I prefer to end classes with a comment like `# END Class ClassName` to make it easier to see which
-class just ended. The double line break is then redundant.
-
-**E305:** expected 2 blank lines after end of function or class  
-Reason: I _always_ end a function with a `return`, preferrably indented at function level. The end of the function is then clear.
-
-## GitHub Action YAML
+### GitHub Action YAML
 
 The check can be implemented as a GitHub action:
 
 ```yaml
-name: Flake8 Checks
+name: flake8
 
 on:
   push:
@@ -87,5 +71,5 @@ jobs:
       - name: Syntax Error Check
         run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
       - name: Coding Style Violations
-        run: flake8 . --count --max-line-length=99 --ignore E203,E221,E226,E241,E251,E261,E266,E302,E305 --show-source --statistics
+        run: flake8 . --count --max-line-length=99 --ignore E221,E226,E228,E241 --show-source --statistics
 ```
