@@ -1,10 +1,21 @@
-# My Python Style Guide
+# Python Code Style
 
 When writing Python code, I generally recommend following the PEP8 standard. It is available here:
 
 * Online at [www.python.org/dev/peps/pep-0008](https://www.python.org/dev/peps/pep-0008).
 * I've also formatted it as an [Open Document](PEP8.odt), also available as a [PDF](PEP8.pdf).
 
+I personally don't follow PEP8 in all cases, although I am happy to work on projects that do. For
+instance, I prefer camelCase to snake_case for function and variable names. I also prefer to let
+code lines run to 99 characters rather than 79 if it will prevent line wrapping.
+
+There is also one specific rule that I will sometimes break because I don't fully agree with the
+argument made for it, and that is column alignment. That is, when multiple lines of variable
+assignments are aligned along the `=` symbol, when large dictionaries are populated, or when
+arguments in repeated calls to the same function are aligned. This _can_ make the code easier to
+read. I especially do this in the `__init__` function of classes. Many other style guides allow for
+it, and for good reason. I do agree that it can be overused, and PEP8 show some good examples of
+when not to do this.
 
 ## Linting with `flake8`
 
@@ -26,11 +37,11 @@ The command line equivalent, with reporting, is:
 flake8 . --count --ignore E221,E226,E228,E241 --max-line-length=99 --show-source --statistics
 ```
 
-The Python extension in VSCode extension can be set up for real-time linting in the editor.
+The Python extension in VSCode can be set up for real-time linting with flake8 in the editor.
 
 ### Ignored Errors
 
-The ignored errors are all `pycodestyle` errors, documented
+The ignored errors in the commands above are all `pycodestyle` errors, documented
 [here](https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes).
 
 Two of the ignored errors are due to the relaxed restriction I generally have on column alignment,
